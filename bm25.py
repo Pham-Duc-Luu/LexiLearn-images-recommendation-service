@@ -2,6 +2,11 @@ import math
 
 
 def combine_result(scores):
+    """
+        Combine the result of multiple words scores
+    :param scores: dict(word: dict(img: score))
+    :return:
+    """
     result = {}
     balance = 1 / len(scores)
     for _, img_scores in scores.items():
@@ -12,15 +17,25 @@ def combine_result(scores):
     return result
 
 
-def get_batch_img(scores, start_idx, interval):
-    return scores[start_idx:start_idx + interval]
+def get_batch_img(result, start_idx, interval):
+    result = list(result.items())
+    return result[start_idx:start_idx + interval]
 
 
 def rank_img(result, reverse=True):
+    """
+        Rank the images based on the scores
+    :param result: dict(img: score)
+    :param reverse: True if descending, False if ascending
+    :return:
+    """
     return dict(sorted(result.items(), key=lambda item: item[1], reverse=reverse))
 
 
 def bm25_get_image(words, bag_of_words, doc_freq, k=1.2, beta=0.75, reverse=True):
+    """
+        BM25 Algorithm Implementation
+    """
     scores = {}
     for word in words:
         scores[word] = {}
