@@ -1,2 +1,4 @@
 .idea/
 __pycache__/
+datasets/flickr8k/Images/
+datasets/flickr8k/captions.txt
