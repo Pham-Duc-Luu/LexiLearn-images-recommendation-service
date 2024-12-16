@@ -10,7 +10,7 @@ matplotlib.use('TkAgg')
 def display_result(list_scores, img_dir_path="./datasets/flickr8k/Images"):
     """
         Display the images in Pycharm backend
-    :param list_scores: list of image path - score pairs
+    :param list_scores: list of (image path, score) tuple
     :param img_dir_path: the path to the image directory
     :return:
     """
