@@ -3,12 +3,12 @@ import math
 
 def combine_result(scores):
     result = {}
-    n_word = len(scores)
+    balance = 1 / len(scores)
     for _, img_scores in scores.items():
         for img, score in img_scores.items():
             if result.get(img) is None:
                 result[img] = 0
-            result[img] += score * (1 / n_word)
+            result[img] += score * balance
     return result
 
 
@@ -17,7 +17,7 @@ def get_batch_img(scores, start_idx, interval):
 
 
 def rank_img(result, reverse=True):
-    return list(sorted(result.items(), key=lambda x: x[1], reverse=reverse))
+    return dict(sorted(result.items(), key=lambda item: item[1], reverse=reverse))
 
 
 def bm25_get_image(words, bag_of_words, doc_freq, k=1.2, beta=0.75, reverse=True):
@@ -41,7 +41,8 @@ def bm25_get_image(words, bag_of_words, doc_freq, k=1.2, beta=0.75, reverse=True
             if bag.get(word) is None:
                 continue
 
-            tf = (k + 1) * bag[word] / (k * (1 - beta + beta * bag_of_words["_avg_len"]) + bag[word])
+            tf = (k + 1) * bag[word] / (
+                    k * (1 - beta + beta * bag["_len"] / (bag_of_words["_avg_len"] * bag["_n_appear"])) + bag[word])
             scores[word][img] = idf * tf
 
     # Combining the results
